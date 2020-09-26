@@ -1,0 +1,26 @@
+{
+  "name": "rlicense",
+  "version": "1.0.0",
+  "description": "An easy to use Node.js licensing system. Made for Minecraft plugins, but can be used for other things too.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "better-sqlite3": "^7.1.0",
+    "enmap": "^5.7.3",
+    "crypto": "^1.0.1"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "MIT",
+  "keywords": [
+    "minecraft",
+    "license",
+    "licensing",
+    "licensesystem",
+    "spigot"
+  ]
+}
