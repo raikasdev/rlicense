@@ -76,6 +76,3 @@ function makeid(length) {
    }
    return result;
 }
-
-var rlicense = require("./index.js")(process.env.KEY);
-rlicense.listen(process.env.PORT)
