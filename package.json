@@ -22,8 +22,5 @@
     "licensing",
     "licensesystem",
     "spigot"
-  ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  }
+  ]
 }
