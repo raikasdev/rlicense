@@ -59,52 +59,63 @@ module.revoke = function (token) {
  */
 module.listen = function(port) {
   const express = require("express");
-  const app = express();
-  app.use(express.static("public"));
 
+  const bodyParser = require("body-parser");
+  const bearerToken = require("express-bearer-token");
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(bearerToken());
   app.get("/", (request, response) => {
-    response.send(request.hostname+"/validate/productHere/tokenHere")
+    response.send("<h2>rLicense Version " + version+"</h2><br><a href='https://npmjs.com/package/rlicense'><img src='https://nodei.co/npm/rlicense.png'></a>");
   });
 
-  app.get("/validate/:product/:token", (req, res) => {
-    var product = req.params.product;
-    var token = req.params.token;
-    if(!token || !product) {
-      res.send("Error")
+  app.post("/api/validate/", (req, res) => {
+    /*
+     * {"product":"productname","token":"token"}
+     */
+    var product = req.body.product;
+    var token = req.body.token;
+    if (!token || !product) {
+      res.status(400).json({error:true});
       return;
     }
-    res.json({valid:module.validate(token,product)})
-  })
+    res.json({ valid: module.validate(token, product) });
+  });
 
-  app.post("/api/new/:apitoken/:product/", (req, res) => {
-    if(!req.params.apitoken || !req.params.product) {
-      res.send("Error")
+  app.post("/api/new/", (req, res) => {
+    /*
+      {"product":"product"}
+    */
+    if (!req.token || !req.body.product) {
+      res.status(400).json({error:true});
       return;
     }
-    if(req.params.apitoken !== cryptKey) {
-      res.send("Error")
+    if (req.token !== cryptKey) {
+      res.status(401).json({error:true});
       return;
     }
-    
-    res.json(module.createToken(req.params.product))
-  })
-  app.post("/api/revoke/:apitoken/:token", (req, res) => {
-    if(!req.params.apitoken || !req.params.token || !req.params.product) {
-      res.send("Error")
+
+    res.json(module.createToken(req.body.product));
+  });
+  app.post("/api/revoke/", (req, res) => {
+    /*
+    {"token":"tokenhere"}
+    */
+    if (!req.token || !req.body.token) {
+      res.status(400).json({error:true});
       return;
     }
-    if(req.params.apitoken !== cryptKey) {
-      res.send("Error")
+    if (req.token !== cryptKey) {
+      res.status(401).json({error:true});
       return;
     }
-    
-    res.json({success: module.revoke(req.params.token)})
-  })
+
+    res.json({ success: module.revoke(req.body.token) });
+  });
   const listener = app.listen(port, () => {
     console.log("rLicense is now listening on port " + listener.address().port);
   });
-}
-
+};
 
 
 function makeid(length) {
