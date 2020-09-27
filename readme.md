@@ -1,3 +1,6 @@
+[![NPM](https://david-dm.org/RaikasCoding/rlicense.svg)]
+[![NPM](https://nodei.co/npm/rlicense.png)](https://nodei.co/npm/rlicense/)
+
 # rLicense
 
 Easy to use licensing system with encryption to keep your data secret
