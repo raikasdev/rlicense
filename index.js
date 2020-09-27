@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 const Enmap = require("enmap");
-var database = new Enmap({name: "database"});
+const database = new Enmap({name: "database"});
 
-var cryptKey;
+let cryptKey;
 module.exports = function(key) {
   cryptKey = key;
   if(!key || key === "") {
@@ -14,10 +14,10 @@ module.exports = function(key) {
 }
 module.createToken = function (product) {
   if(!product) product = "default";
-  var id = makeid(15)
+  let id = makeid(15)
 
-  var key = crypto.createCipher('aes-128-cbc', cryptKey);
-  var crypted = key.update(id, 'utf8', 'hex')
+  let key = crypto.createCipher('aes-128-cbc', cryptKey);
+  let crypted = key.update(id, 'utf8', 'hex')
   crypted += key.final('hex');
 
   database.set(crypted,{token:id,product:req.params.product})
@@ -27,8 +27,8 @@ module.createToken = function (product) {
 module.validate = function (token, product) {
   if(!token) return false;
   if(!product) product = "default";
-  var key = crypto.createCipher('aes-128-cbc', cryptKey);
-    var crypted = key.update(token, 'utf8', 'hex')
+  let key = crypto.createCipher('aes-128-cbc', cryptKey);
+    let crypted = key.update(token, 'utf8', 'hex')
     crypted += key.final('hex');
     if(database.has(crypted)) {
       if(database.get(crypted,"product").toLowerCase() !== product.toLowerCase()) {
@@ -43,8 +43,8 @@ module.validate = function (token, product) {
 
 module.revoke = function (token) {
   if(!token) return false;
-  var key = crypto.createCipher('aes-128-cbc', cryptKey);
-  var crypted = key.update(token, 'utf8', 'hex')
+  let key = crypto.createCipher('aes-128-cbc', cryptKey);
+  let crypted = key.update(token, 'utf8', 'hex')
   crypted += key.final('hex');
   if(database.has(crypted)) {
     database.delete(crypted);
@@ -73,8 +73,8 @@ module.listen = function(port) {
     /*
      * {"product":"productname","token":"token"}
      */
-    var product = req.body.product;
-    var token = req.body.token;
+    let product = req.body.product;
+    let token = req.body.token;
     if (!token || !product) {
       res.status(400).json({error:true});
       return;
@@ -119,9 +119,9 @@ module.listen = function(port) {
 
 
 function makeid(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-   var charactersLength = characters.length;
+   let result           = '';
+   let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   let charactersLength = characters.length;
    for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
