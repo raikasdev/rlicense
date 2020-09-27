@@ -1,5 +1,5 @@
-[NPM](https://david-dm.org/RaikasCoding/rlicense.svg)\
-[NPM](https://img.shields.io/static/v1?label=Contact%20me%20on%20Discord&color=red&style=for-the-badge&logo=discord&message=Raikas%230178)\
+![NPM](https://david-dm.org/RaikasCoding/rlicense.svg)\
+![NPM](https://img.shields.io/static/v1?label=Contact%20me%20on%20Discord&color=red&style=for-the-badge&logo=discord&message=Raikas%230178)\
 [![NPM](https://nodei.co/npm/rlicense.png)](https://nodei.co/npm/rlicense/)
 
 # rLicense
