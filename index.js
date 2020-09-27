@@ -12,53 +12,6 @@ module.exports = function(key) {
   console.log("rLicense is ready to run.")
   return module;
 }
-/*
- * Use the integrated Rest API using Express
- */
-module.listen = function(port) {
-  const express = require("express");
-  const app = express();
-  app.use(express.static("public"));
-
-  app.get("/", (request, response) => {
-    response.send(request.hostname+"/validate/productHere/tokenHere")
-  });
-
-  app.get("/validate/:product/:token", (req, res) => {
-    var product = req.params.product;
-    var token = req.params.token;
-    if(!token || !product) {
-      res.send("Error")
-      return;
-    }
-    
-  })
-
-  app.post("/api/new/:token/:product/", (req, res) => {
-    if(!req.params.token || !req.params.product) {
-      res.send("Error")
-      return;
-    }
-    if(req.params.token !== cryptKey) {
-      res.send("Error")
-      return;
-    }
-    var id = makeid(15)
-
-    var key = crypto.createCipher('aes-128-cbc', cryptKey);
-    var crypted = key.update(id, 'utf8', 'hex')
-    crypted += key.final('hex');
-
-    database.set(crypted,{product:req.params.product})
-    res.json({token:id,product:req.params.product})
-  })
-
-  const listener = app.listen(port, () => {
-    console.log("rLicense is now listening on port " + listener.address().port);
-  });
-}
-
-
 module.createToken = function (product) {
   if(!product) product = "default";
   var id = makeid(15)
@@ -99,6 +52,60 @@ module.revoke = function (token) {
     return false;
   }
 }
+
+/*
+ * Use the integrated Rest API using Express
+ */
+module.listen = function(port) {
+  const express = require("express");
+  const app = express();
+  app.use(express.static("public"));
+
+  app.get("/", (request, response) => {
+    response.send(request.hostname+"/validate/productHere/tokenHere")
+  });
+
+  app.get("/validate/:product/:token", (req, res) => {
+    var product = req.params.product;
+    var token = req.params.token;
+    if(!token || !product) {
+      res.send("Error")
+      return;
+    }
+    res.json({valid:module.validate(token,product)})
+  })
+
+  app.post("/api/new/:apitoken/:product/", (req, res) => {
+    if(!req.params.apitoken || !req.params.product) {
+      res.send("Error")
+      return;
+    }
+    if(req.params.apitoken !== cryptKey) {
+      res.send("Error")
+      return;
+    }
+    
+    res.json(module.createToken(req.params.product))
+  })
+  app.post("/api/revoke/:apitoken/:token", (req, res) => {
+    if(!req.params.apitoken || !req.params.token || !req.params.product) {
+      res.send("Error")
+      return;
+    }
+    if(req.params.apitoken !== cryptKey) {
+      res.send("Error")
+      return;
+    }
+    
+    res.json({success: module.revoke(req.params.token)})
+  })
+  const listener = app.listen(port, () => {
+    console.log("rLicense is now listening on port " + listener.address().port);
+  });
+}
+
+
+
 function makeid(length) {
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
