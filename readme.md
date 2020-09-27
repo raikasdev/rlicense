@@ -1,4 +1,4 @@
-[![NPM](https://david-dm.org/RaikasCoding/rlicense.svg)]
+![NPM](https://david-dm.org/RaikasCoding/rlicense.svg)
 [![NPM](https://nodei.co/npm/rlicense.png)](https://nodei.co/npm/rlicense/)
 
 # rLicense
