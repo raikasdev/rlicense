@@ -1,6 +1,6 @@
 {
   "name": "rlicense",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An easy to use Node.js licensing system. Made for Minecraft plugins, but can be used for other things too.",
   "main": "index.js",
   "scripts": {
