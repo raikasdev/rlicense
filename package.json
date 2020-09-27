@@ -1,5 +1,5 @@
 {
-  "name": "@raikascoding/rlicense",
+  "name": "rlicense",
   "version": "1.0.0",
   "description": "An easy to use Node.js licensing system. Made for Minecraft plugins, but can be used for other things too.",
   "main": "index.js",
@@ -22,5 +22,9 @@
     "licensing",
     "licensesystem",
     "spigot"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaikasCoding/rlicense.git"
+  }
 }
