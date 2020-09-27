@@ -25,7 +25,8 @@ module.createToken = function (product) {
 }
 
 module.validate = function (token, product) {
-  if(!token || !product) return false;
+  if(!token) return false;
+  if(!product) product = "default";
   var key = crypto.createCipher('aes-128-cbc', cryptKey);
     var crypted = key.update(token, 'utf8', 'hex')
     crypted += key.final('hex');
