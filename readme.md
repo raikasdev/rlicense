@@ -14,6 +14,21 @@ var rLicense = require("rlicense");
 var system = rLicense("SecretTokenHere");
 system.listen(process.env.PORT)
 ```
+#### Requests:
+
+To create a license, send a **POST** request to url/api/new/\
+Body Example: `{"product":"example"}`\
+Response Example: `{"token":"token","product":"product"}`\
+Required Bearer Token. The token is the "SecretTokenHere"\
+
+To revoke a license, send a **POST** request to url/api/revoke\
+Body Example: `{"token":"token"}`\
+Response Example: `{"success":true}`\
+Required Bearer Token. The token is the "SecretTokenHere"\
+
+To verify a license, send a **POST** request to url/api/validate\
+Body Example: `{"token":"token","product":"product"}`\
+Response Example: `{"valid":true}`\
 
 To create new api license, send a **POST** request to url/api/new/SecretTokenHere/ProductNameHere
 To revoke a license, send a **POST** request to url/api/revoke/SecretTokenHere/TokenHere
