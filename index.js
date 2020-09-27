@@ -66,7 +66,7 @@ module.listen = function(port) {
   app.use(bodyParser.json());
   app.use(bearerToken());
   app.get("/", (request, response) => {
-    response.send("<h2>rLicense Version " + version+"</h2><br><a href='https://npmjs.com/package/rlicense'><img src='https://nodei.co/npm/rlicense.png'></a>");
+    response.send("<!DOCTYPE html><html><head><title>rLicense " + version + " </title></head><body><h2>rLicense Version " + version+"</h2><br><a href='https://npmjs.com/package/rlicense'><img src='https://nodei.co/npm/rlicense.png'></a></body></html>");
   });
 
   app.post("/api/validate/", (req, res) => {
