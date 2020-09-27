@@ -12,6 +12,9 @@ module.exports = function(key) {
   console.log("rLicense is ready to run.")
   return module;
 }
+/*
+ * Use the integrated Rest API using Express
+ */
 module.listen = function(port) {
   const express = require("express");
   const app = express();
@@ -28,18 +31,7 @@ module.listen = function(port) {
       res.send("Error")
       return;
     }
-    var key = crypto.createCipher('aes-128-cbc', cryptKey);
-    var crypted = key.update(token, 'utf8', 'hex')
-    crypted += key.final('hex');
-    if(database.has(crypted)) {
-      if(database.get(crypted,"product").toLowerCase() !== product.toLowerCase()) {
-        res.json({status:"Not Verified"})
-      } else {
-        res.json({status:"Verified"})
-      }
-    } else {
-      res.json({status:"Not Verified"})
-    }
+    
   })
 
   app.post("/api/new/:token/:product/", (req, res) => {
@@ -57,8 +49,7 @@ module.listen = function(port) {
     var crypted = key.update(id, 'utf8', 'hex')
     crypted += key.final('hex');
 
-    console.log(crypted);
-    database.set(crypted,{token:id,product:req.params.product})
+    database.set(crypted,{product:req.params.product})
     res.json({token:id,product:req.params.product})
   })
 
@@ -67,6 +58,47 @@ module.listen = function(port) {
   });
 }
 
+
+module.createToken = function (product) {
+  if(!product) product = "default";
+  var id = makeid(15)
+
+  var key = crypto.createCipher('aes-128-cbc', cryptKey);
+  var crypted = key.update(id, 'utf8', 'hex')
+  crypted += key.final('hex');
+
+  database.set(crypted,{token:id,product:req.params.product})
+  return {token:id,product:req.params.product};
+}
+
+module.validate = function (token, product) {
+  if(!token || !product) return false;
+  var key = crypto.createCipher('aes-128-cbc', cryptKey);
+    var crypted = key.update(token, 'utf8', 'hex')
+    crypted += key.final('hex');
+    if(database.has(crypted)) {
+      if(database.get(crypted,"product").toLowerCase() !== product.toLowerCase()) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+}
+
+module.revoke = function (token) {
+  if(!token) return false;
+  var key = crypto.createCipher('aes-128-cbc', cryptKey);
+  var crypted = key.update(token, 'utf8', 'hex')
+  crypted += key.final('hex');
+  if(database.has(crypted)) {
+    database.delete(crypted);
+    return true;
+  } else {
+    return false;
+  }
+}
 function makeid(length) {
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
